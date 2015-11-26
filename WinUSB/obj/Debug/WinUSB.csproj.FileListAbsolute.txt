@@ -1,0 +1,5 @@
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\USBss\bin\Debug\WinUSB.dll
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\USBss\bin\Debug\WinUSB.pdb
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\USBss\WinUSB\obj\Debug\WinUSB.csprojResolveAssemblyReference.cache
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\USBss\WinUSB\obj\Debug\WinUSB.dll
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\USBss\WinUSB\obj\Debug\WinUSB.pdb

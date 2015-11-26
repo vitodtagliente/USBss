@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Management;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using WinUSB;
+
+namespace USBss
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            var usbDevices = GetUSBDevices();
+
+            foreach (var usbDevice in usbDevices)
+            {
+                text.AppendText(string.Format("\nDevice ID: {0}, PNP Device ID: {1}, Description: {2}",
+                    usbDevice.DeviceID, usbDevice.PnpDeviceID, usbDevice.Description));
+            }
+        }
+
+        static List<USBDeviceInfo> GetUSBDevices()
+        {
+            List<USBDeviceInfo> devices = new List<USBDeviceInfo>();
+
+            ManagementObjectCollection collection;
+            using (var searcher = new ManagementObjectSearcher(@"Select * From Win32_USBHub"))
+                collection = searcher.Get();
+
+            foreach (var device in collection)
+            {
+                devices.Add(new USBDeviceInfo(
+                (string)device.GetPropertyValue("DeviceID"),
+                (string)device.GetPropertyValue("PNPDeviceID"),
+                (string)device.GetPropertyValue("Description")
+                ));
+            }
+
+            collection.Dispose();
+            return devices;
+        }
+
+        internal class USBDeviceInfo
+        {
+            public USBDeviceInfo(string deviceID, string pnpDeviceID, string description)
+            {
+                this.DeviceID = deviceID;
+                this.PnpDeviceID = pnpDeviceID;
+                this.Description = description;
+            }
+            public string DeviceID { get; private set; }
+            public string PnpDeviceID { get; private set; }
+            public string Description { get; private set; }
+        }
+
+        void OnDeviceInsert(char deviceName)
+        {
+            text.AppendText("devi in: " + deviceName);
+        }
+
+        void OnDeviceRemove(char deviceName)
+        {
+
+            text.AppendText("devi out: " + deviceName);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DEV_BROADCAST_VOLUME
+        {
+            public int dbcv_size;
+            public int dbcv_devicetype;
+            public int dbcv_reserved;
+            public int dbcv_unitmask;
+        }
+
+        //Method to overwrite that manages the arrival of new storage units
+        protected override void WndProc(ref Message m)
+        {
+            //This definitions are stored in “dbt.h” and “winuser.h”
+            // There has been a change in the devices
+            const int WM_DEVICECHANGE = 0x0219;
+            // System detects a new device
+            const int DBT_DEVICEARRIVAL = 0x8000;
+            // Device removal request
+            //const int DBT_DEVICEQUERYREMOVE = 0x8001;
+            // Device removal failed
+            //const int DBT_DEVICEQUERYREMOVEFAILED = 0x8002;
+            // Device removal is pending
+            //const int DBT_DEVICEREMOVEPENDING = 0x8003;
+            // The device has been succesfully removed from the system
+            const int DBT_DEVICEREMOVECOMPLETE = 0x8004;
+            // Logical Volume (A disk has been inserted, such a usb key or external HDD)
+            const int DBT_DEVTYP_VOLUME = 0x00000002;
+            switch (m.Msg)
+            {
+                //If system devices change…
+                case WM_DEVICECHANGE:
+                    switch (m.WParam.ToInt32())
+                    {
+                        //If there is a new device…
+                        case DBT_DEVICEARRIVAL:
+                            {
+                                int devType = Marshal.ReadInt32(m.LParam, 4);
+                                //…and is a Logical Volume (A storage device)
+                                if (devType == DBT_DEVTYP_VOLUME)
+                                {
+                                    DEV_BROADCAST_VOLUME vol;
+                                    vol = (DEV_BROADCAST_VOLUME)Marshal.PtrToStructure(m.LParam, typeof(DEV_BROADCAST_VOLUME));
+                                    OnDeviceInsert(UnitName(vol.dbcv_unitmask));
+                                }
+                            }
+                            break;
+                        case DBT_DEVICEREMOVECOMPLETE:
+                            {
+                                int devType = Marshal.ReadInt32(m.LParam, 4);
+                                //…and is a Logical Volume (A storage device)
+                                if (devType == DBT_DEVTYP_VOLUME)
+                                {
+                                    DEV_BROADCAST_VOLUME vol;
+                                    vol = (DEV_BROADCAST_VOLUME)Marshal.PtrToStructure(m.LParam, typeof(DEV_BROADCAST_VOLUME));
+                                    OnDeviceRemove(UnitName(vol.dbcv_unitmask));
+                                }
+                            }
+                            break;
+                    }
+                    break;
+            }
+            //After the custom manager, we want to use the default system’s manager
+            base.WndProc(ref m);
+        }
+
+        //Method to detect the unit name (”D:”, “F:”, etc)
+        char UnitName(int unitmask)
+        {
+            char[] units = { 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+                'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+            };
+            int i = 0;
+            //Convert the mask in an array, and search
+            //the index for the first occurrenc (the unit’s name)
+            System.Collections.BitArray ba = new
+              System.Collections.BitArray(BitConverter.GetBytes(unitmask));
+            foreach (bool var in ba)
+            {
+                if (var == true)
+                    break;
+                i++;
+            }
+            return units[i];
+        }
+    }
+}
