@@ -62,7 +62,7 @@ namespace WinUSB
                             break;
 
                         case DBT_DEVICEQUERYREMOVE:
-                            // can intercept
+                            SignalDeviceChange(UsbStateChange.Removing, volume);
                             break;
 
                         case DBT_DEVICEREMOVECOMPLETE:
