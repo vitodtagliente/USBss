@@ -37,8 +37,12 @@
             this.dataGrid = new System.Windows.Forms.DataGridView();
             this.clFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clIsFolder = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.setGroupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -54,7 +58,9 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showInExplorerToolStripMenuItem});
+            this.showInExplorerToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.setGroupsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -113,6 +119,27 @@
             this.clIsFolder.ReadOnly = true;
             this.clIsFolder.Width = 50;
             // 
+            // fileSystemWatcher
+            // 
+            this.fileSystemWatcher.EnableRaisingEvents = true;
+            this.fileSystemWatcher.SynchronizingObject = this;
+            this.fileSystemWatcher.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Changed);
+            this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Created);
+            this.fileSystemWatcher.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Deleted);
+            this.fileSystemWatcher.Renamed += new System.IO.RenamedEventHandler(this.fileSystemWatcher_Renamed);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            // 
+            // setGroupsToolStripMenuItem
+            // 
+            this.setGroupsToolStripMenuItem.Name = "setGroupsToolStripMenuItem";
+            this.setGroupsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.setGroupsToolStripMenuItem.Text = "&Set Groups";
+            this.setGroupsToolStripMenuItem.Click += new System.EventHandler(this.setGroupsToolStripMenuItem_Click);
+            // 
             // UsbWatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -134,6 +161,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,5 +177,8 @@
         private System.Windows.Forms.DataGridView dataGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
         private System.Windows.Forms.DataGridViewCheckBoxColumn clIsFolder;
+        private System.IO.FileSystemWatcher fileSystemWatcher;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem setGroupsToolStripMenuItem;
     }
 }

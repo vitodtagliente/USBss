@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1448545323_MB__USB.ico" />
+    <Content Include="Startup.txt" />
     <Content Include="UsbDetectWin32.txt" />
   </ItemGroup>
   <ItemGroup />

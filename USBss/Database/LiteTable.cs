@@ -33,7 +33,10 @@ namespace USBss.Database
 
                 return true;
             }
-            catch (Exception) { return false; }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public SQLiteDataReader Select(string sql)

@@ -15,7 +15,7 @@ namespace USBss.Database.Tables
         public override void Create()
         {
             bool result = Insert(
-                "create table if not exists keys (id INTEGER PRIMARY KEY, deviceId INTEGER NOT NULL, group TEXT NOT NULL, key TEXT NOT NULL)"
+                "create table if not exists keys (id INTEGER PRIMARY KEY, deviceId TEXT NOT NULL, name TEXT NOT NULL, key TEXT NOT NULL)"
                 );
         }
 
@@ -33,7 +33,7 @@ namespace USBss.Database.Tables
             var reader = Select("select * from keys where deviceId = '" + deviceId + "'");
             while (reader != null && reader.Read())
             {
-                fetch.Add(reader["group"].ToString(), reader["key"].ToString());
+                fetch.Add(reader["name"].ToString(), reader["key"].ToString());
             }
             return fetch;
         }

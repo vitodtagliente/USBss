@@ -1,0 +1,13 @@
+﻿using Microsoft.Win32;
+
+private void SetStartup()
+{
+    RegistryKey rk = Registry.CurrentUser.OpenSubKey
+        ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+    if (chkStartUp.Checked)
+        rk.SetValue(AppName, Application.ExecutablePath.ToString());
+    else
+        rk.DeleteValue(AppName,false);            
+
+}

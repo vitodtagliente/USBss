@@ -21,7 +21,8 @@ namespace USBss.Services
         /// <returns></returns>
         public bool Setup()
         {
-            return Setup(GenerateId(), true);
+            Id = GenerateId();
+            return Setup(Id, true);
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace USBss.Services
         /// <returns></returns>
         public bool Setup(string id, bool owner = false)
         {
+            Id = id;
             var table = Database.LiteDatabase.singleton.GetTable("devices");
             if (table != null)
             {

@@ -38,7 +38,7 @@ namespace USBss.Forms
                 foreach (var key in Instances.Keys)
                     if(Instances[key].DeviceName == deviceName)
                     {
-                        Instances[key].Close();
+                        Instances[key].Exit();
                         Instances.Remove(key);
                         return;
                     }
@@ -57,9 +57,10 @@ namespace USBss.Forms
 
         Database.Tables.Keys Keys;
         Database.Tables.Devices Devices;
-
-        FileSystemWatcher watcherService;
+        
         int clStartCount;
+
+        bool end = false;
 
         public UsbWatcherForm(string name, string id)
         {
@@ -84,22 +85,18 @@ namespace USBss.Forms
             // è necessario che io inserisca una password
             if (OwnerMode == false)
             {
-                if (MessageBox.Show(
-                    "Would you like to define a key to this device?",
-                    "No keys found!",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                    ) == DialogResult.Yes)
+                var keyDialog = new KeyForm("Define a key");
+                if (keyDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var keyDialog = new KeyForm("Define a key");
-                    if(keyDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        var password = keyDialog.Password;
+                    var password = keyDialog.Password;
 
-                    }
-                    
                 }
             }
+
+            fileSystemWatcher.Path = DevicePath;
+            
+            UpdateGroupRows();
+            InitGrid();
         }
 
         void InitDatabase()
@@ -131,17 +128,41 @@ namespace USBss.Forms
             }
         }
 
-        void UpdateGrid()
+        void InitGrid()
+        {
+            foreach (var file in Directory.GetFiles(DevicePath))
+            {
+                if (File.GetAttributes(file) != FileAttributes.Hidden)
+                    dataGrid.Rows.Add(Path.GetFileName(file), false);
+            }
+            foreach (var folder in Directory.GetDirectories(DevicePath))
+            {
+                var attr = File.GetAttributes(folder);
+                if (attr != (FileAttributes.System | FileAttributes.Hidden | FileAttributes.Directory))
+                    dataGrid.Rows.Add(Path.GetFileName(folder), true);
+            }
+        }
+
+        void UpdateGroupRows()
         {
             var groups = Keys.GetGroups(DeviceId);
             foreach(var group in groups)
             {
                 if(ColumnExists(group) == false)
                 {
-                    DataGridViewColumn clmn = new DataGridViewColumn();
-                    clmn.HeaderText = group;
-                    clmn.Name = "cl" + group;
-                    dataGrid.Columns.Add(clmn);
+                    var column = new DataGridViewCheckBoxColumn();
+                    column.Name = "cl" + group;
+                    column.HeaderText = group;
+                    column.Width = 50;
+                    dataGrid.Columns. Add(column);
+                }
+            }
+            for(int i=clStartCount; i<dataGrid.Columns.Count;i++)
+            {
+                var column = dataGrid.Columns[i];
+                if(groups.Contains(column.HeaderText) == false)
+                {
+                    dataGrid.Columns.RemoveAt(i);
                 }
             }
         }
@@ -155,23 +176,74 @@ namespace USBss.Forms
             }
             return false;
         }
-
-        bool KeysDialogHandler()
+        
+        public void Exit()
         {
-            return false;
-        }        
+            end = true;
+            Close();
+        }
 
         private void UsbWatcherForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            if (end == false)
+                e.Cancel = true;
         }
 
         private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var process = Process.Start(DevicePath);
-            //process.EnableRaisingEvents = true;
-            //process.Exited += processExited;
         }
-        
+
+        private void setGroupsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var dialog = new GroupsForm(DeviceName, DeviceId);
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                UpdateGroupRows();
+            }
+        }
+
+        #region FileWatcher_events
+
+        private void fileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            
+        }
+
+        private void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            bool isFolder = false;
+            if (File.GetAttributes(e.FullPath) == FileAttributes.Directory)
+                isFolder = true;
+            dataGrid.Rows.Add(e.Name, isFolder);
+        }
+
+        private void fileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
+        {
+            for (int i = 0; i < dataGrid.Rows.Count; i++)
+            {
+                var row = dataGrid.Rows[i];
+                if (row.Cells[0].Value != null && row.Cells[0].Value.ToString() == e.Name)
+                {
+                    dataGrid.Rows.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        private void fileSystemWatcher_Renamed(object sender, RenamedEventArgs e)
+        {
+            for(int i=0; i<dataGrid.Rows.Count; i++)
+            {
+                var row = dataGrid.Rows[i];
+                if(row.Cells[0].Value != null && row.Cells[0].Value.ToString() == e.OldName)
+                {
+                    row.Cells[0].Value = e.Name;
+                    return;
+                }
+            }
+        }
+
+        #endregion
     }
 }

@@ -77,6 +77,7 @@ namespace USBss
             foreach (UsbDisk disk in disks)
             {
                 WriteLine(disk.ToString());
+                OnDeviceAdded(disk.Name);
             }
             WriteLine(string.Empty);
 

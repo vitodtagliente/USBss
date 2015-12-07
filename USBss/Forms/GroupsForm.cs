@@ -76,8 +76,9 @@ namespace USBss.Forms
             {
                 if(fetch.Keys.ToList().Contains(key) == false)
                 {
-                    var result = Keys.Insert("insert into keys (id, deviceId, group, key) VALUES ( NULL, '" + 
-                        DeviceId + "', '" + key + "', '" + grid[key] + "')");
+                    string query = "Insert into keys (id, deviceId, name, key) VALUES ( NULL, '" +
+                        DeviceId + "', '" + key + "', '" + grid[key] + "')";
+                    var result = Keys.Insert(query);
                     if (result == false)
                         return false;
                 }
@@ -86,7 +87,7 @@ namespace USBss.Forms
             {
                 if (grid.Keys.ToList().Contains(key) == false)
                 {
-                    var result = Keys.Insert("delete from keys where deviceId = '" + DeviceId + "' AND group = '" + fetch[key] + "'");
+                    var result = Keys.Insert("delete from keys where deviceId = '" + DeviceId + "' AND name = '" + fetch[key] + "'");
                     if (!result)
                         return false;
                 }

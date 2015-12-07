@@ -116,6 +116,7 @@
             this.Name = "GroupsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "GroupsForm";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GroupsForm_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
