@@ -10,8 +10,17 @@ namespace USBss.Forms
     {
         #region Static
 
+        /// <summary>
+        /// Devo gestire n instance di questo form per gli n dispositivi connessi al PC
+        /// </summary>
         public static Dictionary<string, UsbWatcherForm> Instances { get; private set; }
 
+        /// <summary>
+        /// Avvia la routine di gestione del dispositivo USB
+        /// </summary>
+        /// <param name="deviceName">Nome logico del dispositivo, es. C:, E:, F:, ...</param>
+        /// <param name="deviceId">Id associato al dispositvo dal protocollo di sicurezza</param>
+        /// <returns></returns>
         public static UsbWatcherForm Start(string deviceName, string deviceId)
         {
             if (Instances == null)
@@ -29,6 +38,11 @@ namespace USBss.Forms
             return watcher;
         }
 
+        /// <summary>
+        /// Gestione della chiusura di una delle istanze
+        /// Questo metodo è chiamato, in generale, quando un dispositvo viene scollegato dal PC
+        /// </summary>
+        /// <param name="deviceName"></param>
         public static void Close(string deviceName)
         {
             if (Instances == null)
@@ -95,7 +109,7 @@ namespace USBss.Forms
 
             fileSystemWatcher.Path = DevicePath;
             
-            UpdateGroupRows();
+            UpdateGroupColumns();
             InitGrid();
         }
 
@@ -143,7 +157,11 @@ namespace USBss.Forms
             }
         }
 
-        void UpdateGroupRows()
+        /// <summary>
+        /// Dopo l'avvio del Form per la gestione dei gruppi associati al dispositivo
+        /// occorre aggiornare le colonne della griglia
+        /// </summary>
+        void UpdateGroupColumns()
         {
             var groups = Keys.GetGroups(DeviceId);
             foreach(var group in groups)
@@ -199,7 +217,7 @@ namespace USBss.Forms
             var dialog = new GroupsForm(DeviceName, DeviceId);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                UpdateGroupRows();
+                UpdateGroupColumns();
             }
         }
 

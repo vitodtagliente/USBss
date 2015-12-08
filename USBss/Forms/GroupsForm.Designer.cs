@@ -92,7 +92,10 @@
             this.dataGrid.Name = "dataGrid";
             this.dataGrid.Size = new System.Drawing.Size(290, 188);
             this.dataGrid.TabIndex = 1;
+            this.dataGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellValueChanged);
             this.dataGrid.SelectionChanged += new System.EventHandler(this.dataGrid_SelectionChanged);
+            this.dataGrid.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGrid_UserAddedRow);
+            this.dataGrid.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGrid_UserDeletedRow);
             // 
             // clGroup
             // 

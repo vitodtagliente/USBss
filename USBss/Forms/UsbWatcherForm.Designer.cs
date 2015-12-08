@@ -32,14 +32,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.setGroupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logText = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.dataGrid = new System.Windows.Forms.DataGridView();
+            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
             this.clFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clIsFolder = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.setGroupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
@@ -51,7 +51,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(334, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -72,6 +72,18 @@
             this.showInExplorerToolStripMenuItem.Text = "&Show in Explorer";
             this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            // 
+            // setGroupsToolStripMenuItem
+            // 
+            this.setGroupsToolStripMenuItem.Name = "setGroupsToolStripMenuItem";
+            this.setGroupsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.setGroupsToolStripMenuItem.Text = "&Set Groups";
+            this.setGroupsToolStripMenuItem.Click += new System.EventHandler(this.setGroupsToolStripMenuItem_Click);
+            // 
             // logText
             // 
             this.logText.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -80,7 +92,7 @@
             this.logText.Location = new System.Drawing.Point(0, 24);
             this.logText.Name = "logText";
             this.logText.ReadOnly = true;
-            this.logText.Size = new System.Drawing.Size(284, 337);
+            this.logText.Size = new System.Drawing.Size(334, 337);
             this.logText.TabIndex = 2;
             this.logText.Text = "";
             // 
@@ -88,7 +100,7 @@
             // 
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(284, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(334, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -103,21 +115,8 @@
             this.dataGrid.Location = new System.Drawing.Point(0, 49);
             this.dataGrid.MultiSelect = false;
             this.dataGrid.Name = "dataGrid";
-            this.dataGrid.Size = new System.Drawing.Size(284, 312);
+            this.dataGrid.Size = new System.Drawing.Size(334, 312);
             this.dataGrid.TabIndex = 4;
-            // 
-            // clFilename
-            // 
-            this.clFilename.HeaderText = "Fielname";
-            this.clFilename.Name = "clFilename";
-            this.clFilename.ReadOnly = true;
-            // 
-            // clIsFolder
-            // 
-            this.clIsFolder.HeaderText = "IsFolder";
-            this.clIsFolder.Name = "clIsFolder";
-            this.clIsFolder.ReadOnly = true;
-            this.clIsFolder.Width = 50;
             // 
             // fileSystemWatcher
             // 
@@ -128,23 +127,25 @@
             this.fileSystemWatcher.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Deleted);
             this.fileSystemWatcher.Renamed += new System.IO.RenamedEventHandler(this.fileSystemWatcher_Renamed);
             // 
-            // toolStripSeparator1
+            // clFilename
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            this.clFilename.HeaderText = "Fielname";
+            this.clFilename.Name = "clFilename";
+            this.clFilename.ReadOnly = true;
+            this.clFilename.Width = 150;
             // 
-            // setGroupsToolStripMenuItem
+            // clIsFolder
             // 
-            this.setGroupsToolStripMenuItem.Name = "setGroupsToolStripMenuItem";
-            this.setGroupsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.setGroupsToolStripMenuItem.Text = "&Set Groups";
-            this.setGroupsToolStripMenuItem.Click += new System.EventHandler(this.setGroupsToolStripMenuItem_Click);
+            this.clIsFolder.HeaderText = "IsFolder";
+            this.clIsFolder.Name = "clIsFolder";
+            this.clIsFolder.ReadOnly = true;
+            this.clIsFolder.Width = 50;
             // 
             // UsbWatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 361);
+            this.ClientSize = new System.Drawing.Size(334, 361);
             this.Controls.Add(this.dataGrid);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.logText);
@@ -175,10 +176,10 @@
         private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.DataGridView dataGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clIsFolder;
         private System.IO.FileSystemWatcher fileSystemWatcher;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem setGroupsToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn clIsFolder;
     }
 }

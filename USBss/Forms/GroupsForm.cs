@@ -31,6 +31,8 @@ namespace USBss.Forms
             DeviceId = deviceId;
 
             Init();
+
+            edited = false;
         }
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace USBss.Forms
 
         private void dataGrid_SelectionChanged(object sender, EventArgs e)
         {
-            edited = true;
+            //edited = true;
         }
 
         private void GroupsForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -145,6 +147,21 @@ namespace USBss.Forms
                     Close();
                 }
             }
+        }
+
+        private void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            edited = true;
+        }
+
+        private void dataGrid_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            edited = true;
+        }
+
+        private void dataGrid_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            edited = true;
         }
     }
 }
