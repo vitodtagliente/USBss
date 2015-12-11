@@ -33,7 +33,7 @@ namespace USBss.Database
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

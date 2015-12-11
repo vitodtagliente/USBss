@@ -34,12 +34,14 @@
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.setGroupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.securityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cryptFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.decryptFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logText = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.dataGrid = new System.Windows.Forms.DataGridView();
             this.fileSystemWatcher = new System.IO.FileSystemWatcher();
             this.clFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clIsFolder = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
@@ -48,7 +50,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.securityToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(334, 24);
@@ -84,6 +87,29 @@
             this.setGroupsToolStripMenuItem.Text = "&Set Groups";
             this.setGroupsToolStripMenuItem.Click += new System.EventHandler(this.setGroupsToolStripMenuItem_Click);
             // 
+            // securityToolStripMenuItem
+            // 
+            this.securityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cryptFilesToolStripMenuItem,
+            this.decryptFilesToolStripMenuItem});
+            this.securityToolStripMenuItem.Name = "securityToolStripMenuItem";
+            this.securityToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.securityToolStripMenuItem.Text = "&Security";
+            // 
+            // cryptFilesToolStripMenuItem
+            // 
+            this.cryptFilesToolStripMenuItem.Name = "cryptFilesToolStripMenuItem";
+            this.cryptFilesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.cryptFilesToolStripMenuItem.Text = "&Crypt Files";
+            this.cryptFilesToolStripMenuItem.Click += new System.EventHandler(this.cryptFilesToolStripMenuItem_Click);
+            // 
+            // decryptFilesToolStripMenuItem
+            // 
+            this.decryptFilesToolStripMenuItem.Name = "decryptFilesToolStripMenuItem";
+            this.decryptFilesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.decryptFilesToolStripMenuItem.Text = "&Decrypt Files";
+            this.decryptFilesToolStripMenuItem.Click += new System.EventHandler(this.decryptFilesToolStripMenuItem_Click);
+            // 
             // logText
             // 
             this.logText.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -109,8 +135,7 @@
             this.dataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clFilename,
-            this.clIsFolder});
+            this.clFilename});
             this.dataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGrid.Location = new System.Drawing.Point(0, 49);
             this.dataGrid.MultiSelect = false;
@@ -133,13 +158,6 @@
             this.clFilename.Name = "clFilename";
             this.clFilename.ReadOnly = true;
             this.clFilename.Width = 150;
-            // 
-            // clIsFolder
-            // 
-            this.clIsFolder.HeaderText = "IsFolder";
-            this.clIsFolder.Name = "clIsFolder";
-            this.clIsFolder.ReadOnly = true;
-            this.clIsFolder.Width = 50;
             // 
             // UsbWatcherForm
             // 
@@ -179,7 +197,9 @@
         private System.IO.FileSystemWatcher fileSystemWatcher;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem setGroupsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem securityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cryptFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem decryptFilesToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clIsFolder;
     }
 }

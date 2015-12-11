@@ -27,7 +27,7 @@ namespace USBss.Forms
         {
             InitializeComponent();
 
-            Text = name + " - ACL Groups";
+            Text = "(" + name + ") - AGL Groups";
             DeviceId = deviceId;
 
             Init();
@@ -162,6 +162,11 @@ namespace USBss.Forms
         private void dataGrid_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
             edited = true;
+        }
+
+        private void GroupsForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
