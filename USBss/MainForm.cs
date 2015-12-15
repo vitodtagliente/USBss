@@ -70,6 +70,10 @@ namespace USBss
             UsbManager = new UsbManager();
             UsbManager.StateChanged += new UsbStateChangedEventHandler(DeviceStateChanged);
 
+            // Directory di lavoro per la gestione dei file in user mode
+            if (Directory.Exists(Services.FileSSRestoreService.DataDirectory) == false)
+                Directory.CreateDirectory(Services.FileSSRestoreService.DataDirectory);
+
             // display all devices 
             UsbDiskCollection disks = UsbManager.GetAvailableDisks();
 

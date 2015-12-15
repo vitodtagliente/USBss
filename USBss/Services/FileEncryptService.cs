@@ -14,7 +14,7 @@ namespace USBss.Services
 
         public void Encrypt(string key)
         {
-
+            
         }
 
         /// <summary>
@@ -25,6 +25,11 @@ namespace USBss.Services
         public void Encrypt(List<string> keys)
         {
             if (keys.Count == 0)
+                return;
+
+            // Non fare niente se il file presenta già un protocollo di sicurezza
+            var aglService = new FileAGLService(Filename);
+            if (aglService.Exists() == true)
                 return;
 
             string currentPassword = string.Empty;
@@ -69,7 +74,7 @@ namespace USBss.Services
             if (keys.Count > 1)
                 securityPhrase += ":" + currentPassword;
 
-            var aglService = new FileAGLService(Filename);
+            aglService = new FileAGLService(Filename);
             aglService.Write(securityPhrase, keys);
         }
     }

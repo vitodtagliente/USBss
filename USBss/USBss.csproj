@@ -89,6 +89,7 @@
     <Compile Include="Services\FileCryptoService.cs" />
     <Compile Include="Services\FileDecryptService.cs" />
     <Compile Include="Services\FileEncryptService.cs" />
+    <Compile Include="Services\FileSSRestoreService.cs" />
     <Compile Include="Services\RijndaelService.cs" />
     <EmbeddedResource Include="Forms\GroupsForm.resx">
       <DependentUpon>GroupsForm.cs</DependentUpon>

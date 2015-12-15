@@ -140,6 +140,24 @@ namespace USBss.Services
             return false;
         }
 
+        public byte[] GetBytes()
+        {
+            if (!Exists()) return null;
+
+            int aglSize = Size();
+
+            var stream = new FileStream(Filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            var bytes = new byte[aglSize];
+            stream.Seek(-aglSize, SeekOrigin.End);
+
+            stream.Read(bytes, 0, bytes.Length);
+
+            stream.Close();
+            stream.Dispose();
+
+            return bytes;
+        }
         
     }
 }

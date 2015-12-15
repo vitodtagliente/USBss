@@ -84,6 +84,15 @@ namespace USBss.Forms
         /// </summary>
         bool InitPhase = true;
 
+        /// <summary>
+        /// Questo parametro indica se il valore di una cella è stato modificato o meno
+        /// </summary>
+        bool edit = false;
+
+        // Questa struttura viene utilizzata in user mode
+        // serve a ripristinare l'AGL del file
+        List<Services.FileSSRestoreService> RestoreData = new List<Services.FileSSRestoreService>();
+
         public UsbWatcherForm(string name, string id)
         {
             InitializeComponent();
@@ -109,11 +118,17 @@ namespace USBss.Forms
             if (OwnerMode == false)
             {
                 var keyDialog = new KeyForm("Insert a password...");
+                keyDialog.Text = "(" + DeviceName + ") " + keyDialog.Text;
                 if (keyDialog.ShowDialog() == DialogResult.OK)
                 {
                     UserPassword = keyDialog.Password;
 
                 }
+            }
+            else
+            {
+                // Se sono il proprietario ottengo pieno accesso alle funzionalità di sicurezza
+                securityToolStripMenuItem.Visible = true;
             }
 
             // Avvia il processo di osservazione del dispositivo
@@ -181,7 +196,26 @@ namespace USBss.Forms
             {
                 var attr = File.GetAttributes(file);
                 if (attr != ( FileAttributes.Hidden | FileAttributes.Archive ) && attr != FileAttributes.Hidden)
-                    dataGrid.Rows.Add(Path.GetFileName(file));
+                {
+                    if(OwnerMode)
+                        dataGrid.Rows.Add(Path.GetFileName(file));
+                    else
+                    {
+                        // Nel caso non sono il proprietario del dispositivo, devo aggiungere solo i file a cui posso accedere
+                        // e ovviamente i file privi di AGL
+                        var aglService = new Services.FileAGLService(file);
+                        string temp = string.Empty;
+                        if (aglService.Exists())
+                        {
+                            if (aglService.Access(UserPassword, out temp))
+                            {
+                                int index = dataGrid.Rows.Add(Path.GetFileName(file), true);
+                                dataGrid.Rows[index].Cells[1].ReadOnly = true;
+                            }
+                        }
+                        else dataGrid.Rows.Add(Path.GetFileName(file));
+                    }
+                }
             }
             // Per scielta, decido di non gestire cartelle e sottocartelle del dispositivo,
             // in modo tale da semplificare un pò il progetto
@@ -332,7 +366,7 @@ namespace USBss.Forms
             }
         }
         
-        public void Exit()
+        public void Exit(bool showMessage = false)
         {
             CanCloseForm = true;
             Close();
@@ -340,17 +374,15 @@ namespace USBss.Forms
 
         private void UsbWatcherForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(MessageBox.Show(
-                "",
-                "",
+            if (!CanCloseForm && edit && MessageBox.Show(
+                "Would you like to encrypt selected files?",
+                "Closing the Device Manager...",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 // operazioni di salvataggio
-                CanCloseForm = true;
+                CryptAllFiles();
             }
-            if (CanCloseForm == false)
-                e.Cancel = true;
         }
 
         private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -417,9 +449,16 @@ namespace USBss.Forms
 
         #endregion
 
+        private void closeDeviceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Exit();
+        }
+
         private void cryptFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CryptAllFiles();
+            CanCloseForm = true;
+            edit = false;
         }
 
         private void decryptFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -520,5 +559,10 @@ namespace USBss.Forms
             return keys;
         }
 
+        private void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Qualche cella è stata modificata, teniamone conto
+            edit = true;
+        }
     }
 }

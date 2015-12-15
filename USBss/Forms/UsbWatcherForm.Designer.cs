@@ -34,14 +34,14 @@
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.setGroupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeDeviceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.securityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cryptFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decryptFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logText = new System.Windows.Forms.RichTextBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.dataGrid = new System.Windows.Forms.DataGridView();
-            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
             this.clFilename = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
@@ -63,7 +63,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showInExplorerToolStripMenuItem,
             this.toolStripSeparator1,
-            this.setGroupsToolStripMenuItem});
+            this.setGroupsToolStripMenuItem,
+            this.closeDeviceToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -87,6 +88,13 @@
             this.setGroupsToolStripMenuItem.Text = "&Set Groups";
             this.setGroupsToolStripMenuItem.Click += new System.EventHandler(this.setGroupsToolStripMenuItem_Click);
             // 
+            // closeDeviceToolStripMenuItem
+            // 
+            this.closeDeviceToolStripMenuItem.Name = "closeDeviceToolStripMenuItem";
+            this.closeDeviceToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.closeDeviceToolStripMenuItem.Text = "&Close Device";
+            this.closeDeviceToolStripMenuItem.Click += new System.EventHandler(this.closeDeviceToolStripMenuItem_Click);
+            // 
             // securityToolStripMenuItem
             // 
             this.securityToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -95,18 +103,19 @@
             this.securityToolStripMenuItem.Name = "securityToolStripMenuItem";
             this.securityToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.securityToolStripMenuItem.Text = "&Security";
+            this.securityToolStripMenuItem.Visible = false;
             // 
             // cryptFilesToolStripMenuItem
             // 
             this.cryptFilesToolStripMenuItem.Name = "cryptFilesToolStripMenuItem";
-            this.cryptFilesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.cryptFilesToolStripMenuItem.Text = "&Crypt Files";
+            this.cryptFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cryptFilesToolStripMenuItem.Text = "&Encrypt Files";
             this.cryptFilesToolStripMenuItem.Click += new System.EventHandler(this.cryptFilesToolStripMenuItem_Click);
             // 
             // decryptFilesToolStripMenuItem
             // 
             this.decryptFilesToolStripMenuItem.Name = "decryptFilesToolStripMenuItem";
-            this.decryptFilesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.decryptFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.decryptFilesToolStripMenuItem.Text = "&Decrypt Files";
             this.decryptFilesToolStripMenuItem.Click += new System.EventHandler(this.decryptFilesToolStripMenuItem_Click);
             // 
@@ -122,14 +131,6 @@
             this.logText.TabIndex = 2;
             this.logText.Text = "";
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(334, 25);
-            this.toolStrip1.TabIndex = 3;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
             // dataGrid
             // 
             this.dataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -137,11 +138,19 @@
             this.dataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.clFilename});
             this.dataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGrid.Location = new System.Drawing.Point(0, 49);
+            this.dataGrid.Location = new System.Drawing.Point(0, 24);
             this.dataGrid.MultiSelect = false;
             this.dataGrid.Name = "dataGrid";
-            this.dataGrid.Size = new System.Drawing.Size(334, 312);
+            this.dataGrid.Size = new System.Drawing.Size(334, 337);
             this.dataGrid.TabIndex = 4;
+            this.dataGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellValueChanged);
+            // 
+            // clFilename
+            // 
+            this.clFilename.HeaderText = "Fielname";
+            this.clFilename.Name = "clFilename";
+            this.clFilename.ReadOnly = true;
+            this.clFilename.Width = 150;
             // 
             // fileSystemWatcher
             // 
@@ -152,20 +161,12 @@
             this.fileSystemWatcher.Deleted += new System.IO.FileSystemEventHandler(this.fileSystemWatcher_Deleted);
             this.fileSystemWatcher.Renamed += new System.IO.RenamedEventHandler(this.fileSystemWatcher_Renamed);
             // 
-            // clFilename
-            // 
-            this.clFilename.HeaderText = "Fielname";
-            this.clFilename.Name = "clFilename";
-            this.clFilename.ReadOnly = true;
-            this.clFilename.Width = 150;
-            // 
             // UsbWatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 361);
             this.Controls.Add(this.dataGrid);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.logText);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -192,7 +193,6 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.RichTextBox logText;
         private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.DataGridView dataGrid;
         private System.IO.FileSystemWatcher fileSystemWatcher;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -201,5 +201,6 @@
         private System.Windows.Forms.ToolStripMenuItem cryptFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decryptFilesToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
+        private System.Windows.Forms.ToolStripMenuItem closeDeviceToolStripMenuItem;
     }
 }
