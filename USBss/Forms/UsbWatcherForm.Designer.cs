@@ -86,6 +86,7 @@
             this.setGroupsToolStripMenuItem.Name = "setGroupsToolStripMenuItem";
             this.setGroupsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.setGroupsToolStripMenuItem.Text = "&Set Groups";
+            this.setGroupsToolStripMenuItem.Visible = false;
             this.setGroupsToolStripMenuItem.Click += new System.EventHandler(this.setGroupsToolStripMenuItem_Click);
             // 
             // closeDeviceToolStripMenuItem
@@ -108,14 +109,14 @@
             // cryptFilesToolStripMenuItem
             // 
             this.cryptFilesToolStripMenuItem.Name = "cryptFilesToolStripMenuItem";
-            this.cryptFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cryptFilesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.cryptFilesToolStripMenuItem.Text = "&Encrypt Files";
             this.cryptFilesToolStripMenuItem.Click += new System.EventHandler(this.cryptFilesToolStripMenuItem_Click);
             // 
             // decryptFilesToolStripMenuItem
             // 
             this.decryptFilesToolStripMenuItem.Name = "decryptFilesToolStripMenuItem";
-            this.decryptFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.decryptFilesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.decryptFilesToolStripMenuItem.Text = "&Decrypt Files";
             this.decryptFilesToolStripMenuItem.Click += new System.EventHandler(this.decryptFilesToolStripMenuItem_Click);
             // 
@@ -147,7 +148,7 @@
             // 
             // clFilename
             // 
-            this.clFilename.HeaderText = "Fielname";
+            this.clFilename.HeaderText = "Filename";
             this.clFilename.Name = "clFilename";
             this.clFilename.ReadOnly = true;
             this.clFilename.Width = 150;
@@ -200,7 +201,7 @@
         private System.Windows.Forms.ToolStripMenuItem securityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cryptFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decryptFilesToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
         private System.Windows.Forms.ToolStripMenuItem closeDeviceToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clFilename;
     }
 }

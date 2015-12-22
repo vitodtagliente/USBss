@@ -14,7 +14,37 @@ namespace USBss.Services
 
         public void Encrypt(string key)
         {
-            
+            var stream = new FileStream(Filename, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            // decido quanti byte di inizio file criptare
+            // ovviamente devo tener conto della dimensione del file
+            int headerSize = 254;
+            if (headerSize > stream.Length)
+                headerSize = (int)stream.Length;
+
+            var firstBytes = new byte[headerSize];
+            stream.Read(firstBytes, 0, firstBytes.Length);
+
+            // crittografa il primo blocco di N bytes
+            var crypto = RijndaelService.EncryptBytes(firstBytes, key);
+
+            // leggi tutto il contenuto restante
+            byte[] bytes = new byte[stream.Length - firstBytes.Length];
+            stream.Read(bytes, 0, bytes.Length);
+
+            stream.Close();
+            stream.Dispose();
+
+            // LA situazione ora è definita da
+            // crypto: primi N bytes criptati
+            // bytes: i restanti bytes del file, normali
+
+            stream = new FileStream(Filename, FileMode.Create);
+            // All'inizio del blocco specifica il numero dei byte adibiti all'header section
+            stream.Write(BitConverter.GetBytes(crypto.Length), 0, sizeof(int));
+            stream.Write(crypto, 0, crypto.Length);
+            stream.Write(bytes, 0, bytes.Length);
+            stream.Close();
+            stream.Dispose();
         }
 
         /// <summary>
@@ -37,37 +67,9 @@ namespace USBss.Services
             foreach (var key in keys)
                 currentPassword += key;
 
-            var stream = new FileStream(Filename, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            // decido quanti byte di inizio file criptare
-            // ovviamente devo tener conto della dimensione del file
-            int headerSize = 254;
-            if (headerSize > stream.Length)
-                headerSize = (int)stream.Length / 4;
 
-            var firstBytes = new byte[headerSize];
-            stream.Read(firstBytes, 0, firstBytes.Length);
-
-            // crittografa il primo blocco di N bytes
-            var crypto = RijndaelService.EncryptBytes(firstBytes, currentPassword);
-
-            // leggi tutto il contenuto restante
-            byte[] bytes = new byte[stream.Length - firstBytes.Length];
-            stream.Read(bytes, 0, bytes.Length);
-
-            stream.Close();
-            stream.Dispose();
-
-            // LA situazione ora è definita da
-            // crypto: primi N bytes criptati
-            // bytes: i restanti bytes del file, normali
-
-            stream = new FileStream(Filename, FileMode.Create);
-            // All'inizio del blocco specifica il numero dei byte adibiti all'header section
-            stream.Write(BitConverter.GetBytes(crypto.Length), 0, sizeof(int));
-            stream.Write(crypto, 0, crypto.Length);
-            stream.Write(bytes, 0, bytes.Length);            
-            stream.Close();
-            stream.Dispose();
+            Encrypt(currentPassword);
+            
 
             // Ora resta da scrivere, sul file, la parte riguardante l'AGL
             string securityPhrase = FileAGLService.SecurityPhrase;

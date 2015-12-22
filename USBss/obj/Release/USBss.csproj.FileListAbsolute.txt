@@ -1,2 +1,13 @@
 D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\bin\Release\USBss.exe.config
 D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\bin\Release\USBss.exe.config
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\bin\Release\USBss.exe
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\bin\Release\USBss.pdb
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.csprojResolveAssemblyReference.cache
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.Forms.GroupsForm.resources
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.Forms.KeyForm.resources
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.Forms.UsbWatcherForm.resources
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.MainForm.resources
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.Properties.Resources.resources
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.csproj.GenerateResource.Cache
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.exe
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\USBss\obj\Release\USBss.pdb

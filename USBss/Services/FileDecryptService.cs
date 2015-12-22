@@ -10,10 +10,12 @@ namespace USBss.Services
 {
     public class FileDecryptService : FileCryptoService
     {
+        public string Key { get; private set; }
+
         public FileDecryptService(string filename)
             : base(filename)
         {
-
+            Key = string.Empty;
         }
         
         public bool Decrypt(string key, bool ownermode = true)
@@ -49,6 +51,7 @@ namespace USBss.Services
             try
             {
                 decrypto = RijndaelService.DecryptBytes(headerBytes, password);
+                Key = password;
             }
             catch (Exception) { return false; }
 

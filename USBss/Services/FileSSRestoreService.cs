@@ -16,48 +16,52 @@ namespace USBss.Services
         public static readonly string DataDirectory = "Data";
 
         public string Filename { get; private set; }
+        public string Name { get; private set; }
+        public string DeviceName { get; private set; }
+
+        public string Path { get; private set; }
 
         public string Key { get; private set; }
 
-        public FileSSRestoreService(string filename)
+        public FileSSRestoreService(string deviceName, string filename)
         {
-            Filename = filename;
+            DeviceName = deviceName.Replace(":", string.Empty);
+            Name = filename;
+
+            Path = DataDirectory + "/" + DeviceName;
+            if (Directory.Exists(Path) == false)
+                Directory.CreateDirectory(Path);
+
+            Filename = Path + "/" + Name;
         }
 
         public void Rename(string filename)
         {
-            Filename = filename;
+            Name = filename;
             // etc...
         }
 
-        public void Store()
+        public void Store(byte[] aglBytes)
         {
-
+            var stream = new FileStream(Filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+            stream.Write(aglBytes, 0, aglBytes.Length);
+            stream.Close();
+            stream.Dispose();
         }
 
-        public bool Restore(string deviceName, string key)
+        public void SetKey(string key)
         {
-            deviceName = deviceName.Replace(":", string.Empty);
-            var path = DataDirectory + "/" + deviceName;
-            if (Directory.Exists(path) == false)
-                Directory.CreateDirectory(path);
+            Key = key;
+        }
 
-            var aglService = new FileAGLService(Filename);
-            if (aglService.Exists() == false)
-                return false;
-
-            string decryptoAGL = string.Empty;
-            string password = key;
-            if (aglService.Access(key, out decryptoAGL))
-            {
-                if (decryptoAGL.Contains(FileAGLService.SecurityPhrase + ":"))
-                    password = decryptoAGL.Replace(FileAGLService.SecurityPhrase + ":", string.Empty);
-            }
-            else return false;
-
-
-
-            return true;
+        public byte[] Restore()
+        {
+            var stream = new FileStream(Filename, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            var bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            stream.Close();
+            stream.Dispose();
+            return bytes;
         }
     }
 }

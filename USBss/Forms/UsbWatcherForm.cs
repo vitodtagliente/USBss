@@ -129,6 +129,7 @@ namespace USBss.Forms
             {
                 // Se sono il proprietario ottengo pieno accesso alle funzionalità di sicurezza
                 securityToolStripMenuItem.Visible = true;
+                setGroupsToolStripMenuItem.Visible = true;
             }
 
             // Avvia il processo di osservazione del dispositivo
@@ -374,15 +375,21 @@ namespace USBss.Forms
 
         private void UsbWatcherForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!CanCloseForm && edit && MessageBox.Show(
+            if (CanCloseForm) return;
+
+            if (OwnerMode)
+            {
+                if(MessageBox.Show(
                 "Would you like to encrypt selected files?",
                 "Closing the Device Manager...",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                // operazioni di salvataggio
-                CryptAllFiles();
+                {
+                    // operazioni di salvataggio
+                    CryptAllFiles();
+                }
             }
+            else CryptAllFiles();
         }
 
         private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -451,7 +458,7 @@ namespace USBss.Forms
 
         private void closeDeviceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Exit();
+            Close();
         }
 
         private void cryptFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -485,7 +492,26 @@ namespace USBss.Forms
                 }
                 else
                 {
-                    crypto.Encrypt(UserPassword);
+                    var found = false;
+
+                    if (row.Cells[1].Value == null || row.Cells[1].Value.ToString() == false.ToString())
+                        continue;
+
+                    foreach(var restoreService in RestoreData)
+                        if(restoreService.Name == row.Cells[0].Value.ToString())
+                        {
+                            crypto.Encrypt(restoreService.Key);
+                            var stream = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                            var agl = restoreService.Restore();
+                            stream.Write(agl, 0, agl.Length);
+                            stream.Close();
+                            stream.Dispose();
+                            found = true;
+                            break;
+                        }
+
+                    if (!found)
+                        crypto.Encrypt(new List<string>() { UserPassword });
                 }
             }
         }
@@ -526,9 +552,18 @@ namespace USBss.Forms
                 else
                 {
                     currentPassword = UserPassword;
+
+                    // memorizza l'AGL del file
+                    var restoreService = new Services.FileSSRestoreService(DeviceName, row.Cells[0].Value.ToString());
+                    restoreService.Store(aglService.GetBytes());
+
+                    RestoreData.Add(restoreService);
                 }
                 
-                var result = decryptoService.Decrypt(currentPassword, OwnerMode);
+                if(decryptoService.Decrypt(currentPassword, OwnerMode) && !OwnerMode)
+                {
+                    RestoreData[RestoreData.Count - 1].SetKey(decryptoService.Key);
+                }
             }
         }
 

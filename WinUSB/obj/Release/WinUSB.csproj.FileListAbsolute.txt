@@ -1,0 +1,4 @@
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\bin\Release\WinUSB.dll
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\bin\Release\WinUSB.pdb
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\WinUSB\obj\Release\WinUSB.dll
+D:\Documents\Poliba\Magistrale\Data Security\Progetto\usbSS\WinUSB\obj\Release\WinUSB.pdb
