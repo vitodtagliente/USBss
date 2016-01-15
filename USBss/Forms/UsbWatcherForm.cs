@@ -423,9 +423,12 @@ namespace USBss.Forms
         private void fileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
             bool isFolder = false;
-            if (File.GetAttributes(e.FullPath) == FileAttributes.Directory)
-                isFolder = true;
-            dataGrid.Rows.Add(e.Name, isFolder);
+            var attributes = File.GetAttributes(e.FullPath);
+            if (attributes == FileAttributes.Directory || attributes == FileAttributes.Hidden || attributes == (FileAttributes.Hidden | FileAttributes.Archive ))
+                return;
+
+            if(dataGrid != null)
+                dataGrid.Rows.Add(e.Name, isFolder);
         }
 
         private void fileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
